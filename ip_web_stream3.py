@@ -43,8 +43,8 @@ def gen_frames():
         if not success:
             break
 
-        # detections = model(frame)
-        # frame = model.draw(frame, detections, class_names=["car"])
+        detections = model(frame)
+        frame = model.draw(frame, detections, class_names=["car"])
 
         ret, buffer = cv2.imencode(".jpg", frame)
 
