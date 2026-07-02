@@ -37,14 +37,28 @@ def index():
 
 
 def gen_frames():
+    ############
+    global frame_count, last_detections
+    ############
     while True:
         success, frame = camera.read()
 
         if not success:
             break
 
-        detections = model(frame)
-        frame = model.draw(frame, detections, class_names=["car"])
+        # detections = model(frame)
+        # frame = model.draw(frame, detections, class_names=["car"])
+
+        ##############
+        frame_count += 1
+
+        # 每 3 幀才推論一次
+        if frame_count % 3 == 0:
+            last_detections = model(frame)
+
+        # 其他幀沿用上一次結果
+        frame = model.draw(frame, last_detections, class_names=["car"])
+        ##############
 
         ret, buffer = cv2.imencode(".jpg", frame)
 
