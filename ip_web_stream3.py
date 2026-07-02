@@ -7,7 +7,7 @@ app = Flask(__name__)
 camera = cv2.VideoCapture(0)
 
 model = TRTDetector(
-    engine_path="best.engine",
+    engine_path="model/best.engine",
     input_size=640,
     conf_thres=0.25,
     iou_thres=0.45
