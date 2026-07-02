@@ -29,6 +29,8 @@ HTML = """
 </body>
 </html>
 """
+frame_count = 0
+last_detections = []
 
 
 @app.route("/")
