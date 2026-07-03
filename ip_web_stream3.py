@@ -11,7 +11,7 @@ print("Camera height:", camera.get(cv2.CAP_PROP_FRAME_HEIGHT))
 print("Camera FPS:", camera.get(cv2.CAP_PROP_FPS))
 
 model = TRTDetector(
-    engine_path="model/best.engine",
+    engine_path="model/best2.engine",
     input_size=640,
     conf_thres=0.25,
     iou_thres=0.45
@@ -29,8 +29,8 @@ HTML = """
 </body>
 </html>
 """
-frame_count = 0
-last_detections = []
+# frame_count = 0
+# last_detections = []
 
 
 @app.route("/")
@@ -40,7 +40,7 @@ def index():
 
 def gen_frames():
     ############
-    global frame_count, last_detections
+    # global frame_count, last_detections
     ############
     while True:
         success, frame = camera.read()
@@ -48,18 +48,18 @@ def gen_frames():
         if not success:
             break
 
-        # detections = model(frame)
-        # frame = model.draw(frame, detections, class_names=["car"])
+        detections = model(frame)
+        frame = model.draw(frame, detections, class_names=["car"])
 
         ##############
-        frame_count += 1
+        # frame_count += 1
 
-        # 每 3 幀才推論一次
-        if frame_count % 3 == 0:
-            last_detections = model(frame)
+        # # 每 3 幀才推論一次
+        # if frame_count % 3 == 0:
+        #     last_detections = model(frame)
 
-        # 其他幀沿用上一次結果
-        frame = model.draw(frame, last_detections, class_names=["car"])
+        # # 其他幀沿用上一次結果
+        # frame = model.draw(frame, last_detections, class_names=["car"])
         ##############
 
         ret, buffer = cv2.imencode(".jpg", frame)
