@@ -6,6 +6,21 @@ app = Flask(__name__)
 
 camera = cv2.VideoCapture(0)
 
+# 關掉自動曝光
+# 有些 UVC webcam：0.25 = 手動曝光，0.75 = 自動曝光
+camera.set(cv2.CAP_PROP_AUTO_EXPOSURE, 0.25)
+
+# 設定手動曝光值
+# 數值依相機不同，常見是負數，例如 -4, -5, -6
+camera.set(cv2.CAP_PROP_EXPOSURE, -5)
+
+# 關掉自動白平衡
+camera.set(cv2.CAP_PROP_AUTO_WB, 0)
+
+# 設定手動白平衡
+# 常見範圍大概 2800~6500
+camera.set(cv2.CAP_PROP_WB_TEMPERATURE, 4500)
+
 print("Camera width:", camera.get(cv2.CAP_PROP_FRAME_WIDTH))
 print("Camera height:", camera.get(cv2.CAP_PROP_FRAME_HEIGHT))
 print("Camera FPS:", camera.get(cv2.CAP_PROP_FPS))
