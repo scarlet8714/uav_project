@@ -26,7 +26,7 @@ print("Camera height:", camera.get(cv2.CAP_PROP_FRAME_HEIGHT))
 print("Camera FPS:", camera.get(cv2.CAP_PROP_FPS))
 
 model = TRTDetector(
-    engine_path="model/best.engine",
+    engine_path="model/last.engine",
     input_size=640,
     conf_thres=0.25,
     iou_thres=0.45
