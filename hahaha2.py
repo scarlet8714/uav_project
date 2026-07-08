@@ -33,11 +33,11 @@ CAMERA_THREAD_READ_TIMEOUT_SEC = 2.0
 
 # ---------- YOLO ----------
 # 你的 TensorRT engine 或 .pt 模型路徑
-MODEL_PATH = "model/last.engine"
+MODEL_PATH = "model/11s_car_rec.engine"
 
 # YOLO 推論參數
-YOLO_IMGSZ = 640
-YOLO_CONF = 0.25
+YOLO_IMGSZ = (544, 960)
+YOLO_CONF = 0.4
 YOLO_IOU = 0.45
 
 # ---------- GPS ----------
@@ -52,14 +52,14 @@ GPS_BAUDRATE = 9600
 # 【目前需要你手動填】
 # 相機距離地面的高度 AGL，單位：公尺。
 # 你的情況大約 60~80 m，例如先用 70。
-ALTITUDE_AGL_M = 70.0
+ALTITUDE_AGL_M = 80.0
 
 # ---------- Camera FOV ----------
 # 【目前需要你手動填】
 # 相機水平與垂直 FOV，單位：degree。
 # 下列只是暫時測試值，不代表你的白牌 USB camera 真實規格。
-HFOV_DEG = 70.0
-VFOV_DEG = 43.0
+HFOV_DEG = 52.0
+VFOV_DEG = 31.0
 
 # ---------- Camera direction offset ----------
 # 【需要你確認】
@@ -118,7 +118,7 @@ ROI_HALF_SIZE = 9
 # 【需要你實測調整】
 # ROI 內紅色 pixel 數大於此值時，框改成紅色。
 # 目前依你的設計先用 100。
-RED_PIXEL_THRESHOLD = 100
+RED_PIXEL_THRESHOLD = 60
 
 # OpenCV HSV 的 Hue 範圍是 0~179。
 # 紅色跨越 Hue 頭尾，因此使用兩段範圍。
@@ -270,6 +270,8 @@ class ThreadedCamera:
 # ============================================================
 
 base_camera = cv2.VideoCapture(CAMERA_SOURCE)
+base_camera.set(cv2.CAP_PROP_FRAME_WIDTH, 1280)
+base_camera.set(cv2.CAP_PROP_FRAME_HEIGHT, 720)
 
 if not base_camera.isOpened():
     raise RuntimeError(
@@ -850,13 +852,13 @@ def gen_frames():
             )
 
             # 畫 bbox 中心點
-            cv2.circle(
-                annotator.im,
-                (int(target_x), int(target_y)),
-                5,
-                (0, 255, 255),
-                -1,
-            )
+            # cv2.circle(
+            #     annotator.im,
+            #     (int(target_x), int(target_y)),
+            #     5,
+            #     (0, 255, 255),
+            #     -1,
+            # )
 
             if PRINT_HSV_DEBUG:
                 print(
@@ -901,7 +903,7 @@ def gen_frames():
                     image_width=image_width,
                     image_height=image_height,
                     used_text_rects=used_gps_text_rects,
-                    color=(0, 255, 0),
+                    color=(238, 43, 57),
                 )
 
                 if PRINT_TARGET_GPS:
